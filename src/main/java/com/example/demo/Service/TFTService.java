@@ -26,7 +26,7 @@ public class TFTService {
     private static final String HIGH_ELO = "https://na1.api.riotgames.com/tft/league/v1/";
     private static final String LOW_ELO = "https://na1.api.riotgames.com/tft/league/v1/entries/";
 
-    private static final String apiKey_temp = "RGAPI-4c518d81-3e9e-4907-b916-8bf0aedc0bcd";
+    private static final String apiKey_temp = ""; // REDACTED
 
     enum Numeral {
         I(1), IV(4), V(5), IX(9), X(10), XL(40), L(50), XC(90), C(100), CD(400), D(500), CM(900), M(1000);
