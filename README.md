@@ -4,7 +4,7 @@ A REST-based Java API, TFTool compiles match history data and outputs stats on u
 * Will support data from Sets 1-3.5 and 4.5
 * Analysis of most popular units and compositions in every tier
 * SQL Database
-# How to Use
+# How to use TFTool
 1) Obtain a temp Riot developer API-key and paste your key here: (\TFTool\src\main\java\com\example\demo\Service)
 ![image](https://user-images.githubusercontent.com/33067558/121982076-d6d68380-cd5c-11eb-9e8b-c3c52e642dfd.png)
 2) Run the DemoApplication file by right-clicking it and hitting 'Run DemoApplication'
