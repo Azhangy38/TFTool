@@ -5,5 +5,11 @@ A REST-based Java API, TFTool compiles match history data and outputs stats on u
 * Analysis of most popular units and compositions in every tier
 * SQL Database
 # How to Use
-Obtain a temp Riot developer API-key and paste your key here
+Obtain a temp Riot developer API-key and paste your key here: (\TFTool\src\main\java\com\example\demo\Service)
 ![image](https://user-images.githubusercontent.com/33067558/121982076-d6d68380-cd5c-11eb-9e8b-c3c52e642dfd.png)
+Run the TFTService.java file by right-clicking it and hitting "run"
+The local server is now running. To get HTTP GET and POST requests, create a new HTTP request in Postman and select which api call you want from the TFTController file
+Ex)
+![image](https://user-images.githubusercontent.com/33067558/121982775-2f5a5080-cd5e-11eb-91b5-b5808a3c2c86.png)
+In this example, set key = summonerID and value => name of whatever player you are looking up (the URL will automatically change to match your inputs)
+![image](https://user-images.githubusercontent.com/33067558/121982940-7e07ea80-cd5e-11eb-8c70-7a9c5fe03b04.png)
