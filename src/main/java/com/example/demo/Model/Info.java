@@ -14,5 +14,7 @@ public class Info {
     private String game_version;
     private List<Participants> participants;
     private int queue_id;
+    private String tft_mode;
+    private String tft_game_type;
     private int tft_set_number;
 }

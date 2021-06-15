@@ -26,7 +26,7 @@ public class TFTService {
     private static final String HIGH_ELO = "https://na1.api.riotgames.com/tft/league/v1/";
     private static final String LOW_ELO = "https://na1.api.riotgames.com/tft/league/v1/entries/";
 
-    private static final String apiKey_temp = ""; // REDACTED
+    private static final String apiKey_temp = ""; // REDACTED, replace with your own apikey if you want to try this
 
     enum Numeral {
         I(1), IV(4), V(5), IX(9), X(10), XL(40), L(50), XC(90), C(100), CD(400), D(500), CM(900), M(1000);
@@ -55,7 +55,7 @@ public class TFTService {
 
     private Client client = ClientBuilder.newClient();
 
-    public PuuidResponse getPuuid() throws IOException {
+    public PuuidResponse getPuuid() {
         PuuidResponse response = client
                 .target(PUUID_URI)
                 .request(MediaType.APPLICATION_JSON)
