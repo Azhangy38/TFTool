@@ -14,3 +14,6 @@ Ex)
 ![image](https://user-images.githubusercontent.com/33067558/121982775-2f5a5080-cd5e-11eb-91b5-b5808a3c2c86.png)
 In this example, set key = summonerID and value => name of whatever player you are looking up (the URL will automatically change to match your inputs)
 ![image](https://user-images.githubusercontent.com/33067558/121982940-7e07ea80-cd5e-11eb-8c70-7a9c5fe03b04.png)
+Ta-da! Now we have Soju's unit usage analysis
+
+Disclaimer: Soju was in no way affiliated with this project
