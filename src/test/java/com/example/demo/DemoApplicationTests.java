@@ -22,16 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class DemoApplicationTests {
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void testHighEloList(){
 		TFTService test = new TFTService();
 
 		HighEloResponse response = test.getHighElo("challenger");
 		List<Entry> challenger = response.getEntries();
-
+		assertNotNull(response);
 		for (int i = 0; i < challenger.size(); i++){ // maybe use a for each loop
 			System.out.println(challenger.get(i).getSummonerName() + ", " + challenger.get(i).getLeaguePoints()+", " + i);
 		}
@@ -42,7 +38,7 @@ class DemoApplicationTests {
 		TFTService test = new TFTService();
 		// has to be between 1 and 4
 		LowEloResponse[] response = test.getLowElo("gold", 4, 1);
-
+		assertNotNull(response);
 		for (int i = 0; i < response.length; i++){ // maybe use a for each loop
 			System.out.println(response[i].getSummonerName() + ", " + response[i].getLeaguePoints()+", " + i);
 		}
@@ -53,7 +49,6 @@ class DemoApplicationTests {
 		TFTService test = new TFTService();
 		SummonerIDResponse summoner = test.getSummonerID("SpicyN0odlez");
 		assertEquals("SpicyN0odlez", summoner.getName());
-
 	}
 
 	@Test
@@ -93,11 +88,26 @@ class DemoApplicationTests {
 	}
 
 	@Test
+	void testRecentMatchDetails(){ // irrelevant test, shortened version of one below
+		TFTService test = new TFTService();
+		SummonerIDResponse summoner = test.getSummonerID("goroutine");
+		String[] matches = test.getMatchHistory(summoner.getPuuid(), 20);
+		for (int i = 0; i < 20; i++){
+			MatchDetailsResponse matchDetails = test.getMatchDetails(matches[i]);
+			Metadata meta = matchDetails.getMetadata();
+			assertEquals(matches[i], meta.getMatch_id());
+		}
+
+	}
+
+	@Test
 	void testGameAnalysis(){
 		TFTService tft = new TFTService();
 		SummonerIDResponse summoner = tft.getSummonerID("SpicyN0odlez");
 		String[] matches = tft.getMatchHistory(summoner.getPuuid(), 20);
-
+		MatchDetailsResponse matchDetails = tft.getMatchDetails(matches[0]);
+		Metadata meta = matchDetails.getMetadata();
+		assertEquals(matches[0], meta.getMatch_id());
 		tft.getMatchAnalysis(matches[0]);
 	}
 
