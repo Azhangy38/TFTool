@@ -1,7 +1,7 @@
 # TFTool
-A REST-based Java API, TFTool compiles match history data and outputs stats on units, traits, and summoners on the NA server. Updated to support Set 5 units and match history.
+A REST-based Java API, TFTool compiles match history data and outputs stats on units, traits, and summoners on the NA server. Updated to support Set 8 units and match history.
 # Planned Updates
-* Will support data from Sets 1-3.5 and 4.5
+* ~~Will support data from Sets 1-3.5 and 4.5~~
 * Analysis of most popular units and compositions in every tier
 * SQL Database
 # How to use TFTool (using IntelliJ IDE)
@@ -17,3 +17,5 @@ In this example, set key = summonerID and value => name of whatever player you a
 Ta-da! Now we have Soju's unit usage analysis
 
 Disclaimer: Soju was in no way affiliated with this project
+
+EDIT: Match history analysis is in progress, as Riot no longer publishes static data
