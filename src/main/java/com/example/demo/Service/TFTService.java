@@ -1,6 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Model.*;
+import com.example.demo.Model.StaticData.SetData.SetData;
+import com.example.demo.Model.StaticData.StaticData;
 import com.example.demo.Response.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -80,25 +82,23 @@ public class TFTService {
     }
 
     public HighEloResponse getHighElo(String division) { // Master and above, division names will need toUpperCase() method
-        String highEloUrl = HIGH_ELO + division;
+        String highEloUrl = HIGH_ELO + division.toLowerCase()+"?api_key="+apiKey_temp;
         HighEloResponse response = client
                 .target(highEloUrl)
                 .request(MediaType.APPLICATION_JSON)
-                .header("X-Riot-Token", apiKey_temp)
                 .get(HighEloResponse.class);
         return response;
     }
 
-    public LowEloResponse[] getLowElo(String tier, int division, int page) {
-        String TIER = tier.toUpperCase(Locale.ROOT);
+    public LowEloResponse[] getLowElo(String tier, int division) {
+        String TIER = tier.toUpperCase();
         String numeral = roman(division);
 
-        String lowEloUrl = LOW_ELO + TIER + "/" + numeral + "?page=" + page;
+        String lowEloUrl = LOW_ELO + TIER + "/" + numeral + "?api_key="+apiKey_temp;
 
         LowEloResponse[] response = client
                 .target(lowEloUrl)
                 .request(MediaType.APPLICATION_JSON)
-                .header("X-Riot-Token", apiKey_temp)
                 .get(LowEloResponse[].class);
 
         return response;
@@ -206,9 +206,13 @@ public class TFTService {
      */
     public HashMap<String, Integer> createChampionMap(HashMap hm) {
         JSONParser jsonParser = new JSONParser();
-        try (FileReader reader = new FileReader("champions.json")) {
+        try (FileReader reader = new FileReader("StaticData.json")) {
             Object obj = jsonParser.parse(reader);
+            StaticData staticData = (StaticData) obj;
+            SetData[] setData = staticData.getSetData();
+
             JSONArray championList = (JSONArray) obj;
+
             championList.forEach(champ -> parseChampionList((JSONObject) champ, hm));
 
         } catch (FileNotFoundException e) {
@@ -226,6 +230,8 @@ public class TFTService {
      * Function: sets the values of all the keys to 0
      */
     public static void parseChampionList(JSONObject champion, HashMap champCount) {
+
+
         champCount.put(champion.get("name"), 0); // initialize each champ to 0
 
     }

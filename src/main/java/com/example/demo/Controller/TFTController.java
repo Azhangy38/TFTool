@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,32 +23,47 @@ public class TFTController {
     private TFTService tftService;
 
     @GetMapping("/matchHistory")
-    public String[] getMatchHistory(@RequestParam String summonerID) {
-        SummonerIDResponse summoner = tftService.getSummonerID(summonerID);
+    public String[] getMatchHistory(@RequestParam String summonerId) {
+        SummonerIDResponse summoner = tftService.getSummonerID(summonerId);
         String[] matches = tftService.getMatchHistory(summoner.getPuuid(), 20);
         return matches;
     }
 
-    @GetMapping("/highEloList") // No Challenger or GM players
+    @GetMapping("/highEloList")
     public HighTierResponse highTierList(@RequestParam String tier){
         HighTierResponse response = new HighTierResponse();
         HighEloResponse eloResponse = tftService.getHighElo(tier);
         List<Summoner> summonersList = tftService.getHighSummonersList(eloResponse);
+        summonersList.sort((s1,s2) -> s2.getLeaguePoints()-s1.getLeaguePoints());
         response.setTier(tier);
         response.setSummoner(summonersList);
         return response;
     }
 
+    @PostMapping("/lowEloList")
+    public LowTierResponse lowTierList(@RequestBody LowDivisionQuery lowDivisionQuery){
+        // might have to had pages back in
+        LowTierResponse response = new LowTierResponse();
+        LowEloResponse[] eloResponse = tftService.getLowElo(lowDivisionQuery.getTier(), lowDivisionQuery.getDivision());
+        List<Summoner> summonersList = tftService.getLowSummonersList(eloResponse);
+        summonersList.sort((s1,s2) -> s2.getLeaguePoints() - s1.getLeaguePoints());
+        response.setDivision(lowDivisionQuery.getDivision());
+        response.setTier(lowDivisionQuery.getTier());
+        response.setSummoner(summonersList);
+        return response;
+    }
+
     @GetMapping("/matchHistoryAnalysis")
-    public MatchHistoryAnalysisResponse getMatchHistoryAnalysis(@RequestParam String summonerID) {
-        SummonerIDResponse summoner = tftService.getSummonerID(summonerID);
+    public MatchHistoryAnalysisResponse getMatchHistoryAnalysis(@RequestParam String summonerId) {
+        SummonerIDResponse summoner = tftService.getSummonerID(summonerId);
         HashMap<String, Integer> champCount = new HashMap<>();
         HashMap<String, Integer> avgRank = new HashMap<>();
         tftService.createChampionMap(champCount);
         tftService.createChampionMap(avgRank);
-        String[] matches = tftService.getMatchHistory(summoner.getPuuid(), 30);
+        String[] matches = tftService.getMatchHistory(summoner.getPuuid(), 20);
         tftService.analyzeChampionStats(summoner, matches, champCount, avgRank);
         List<ChampStat> champStatList = tftService.setAnalysisMap(champCount, avgRank);
+        champStatList.sort((c1,c2) -> c2.getNumGames() - c1.getNumGames());
         MatchHistoryAnalysisResponse response = new MatchHistoryAnalysisResponse();
         response.setSummonerName(summoner.getName());
         response.setChampStats(champStatList);
@@ -80,17 +96,7 @@ public class TFTController {
         return response;
     }
 
-    @PostMapping("/lowEloList")
-    public LowTierResponse lowTierList(@RequestBody LowDivisionQuery lowDivisionQuery){
-        LowTierResponse response = new LowTierResponse();
-        LowEloResponse[] eloResponse = tftService.getLowElo(lowDivisionQuery.getTier(), lowDivisionQuery.getDivision(), lowDivisionQuery.getPage());
-        List<Summoner> summonersList = tftService.getLowSummonersList(eloResponse);
-        response.setDivision(lowDivisionQuery.getDivision());
-        response.setTier(lowDivisionQuery.getTier());
-        response.setPage(lowDivisionQuery.getPage());
-        response.setSummoner(summonersList);
-        return response;
-    }
+
 
 
 

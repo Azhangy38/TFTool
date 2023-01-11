@@ -9,6 +9,7 @@ import lombok.Getter;
 @Setter
 public class Companion {
     private String content_ID;
+    private int item_ID;
     private int skin_ID;
     private String species;
 }

@@ -10,6 +10,5 @@ import java.util.List;
 public class LowTierResponse {
     private String tier;
     private int division;
-    private int page;
     private List<Summoner> summoner;
 }

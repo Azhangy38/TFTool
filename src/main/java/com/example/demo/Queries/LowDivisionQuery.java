@@ -8,5 +8,4 @@ import lombok.Getter;
 public class LowDivisionQuery {
     private String tier;
     private int division;
-    private int page;
 }

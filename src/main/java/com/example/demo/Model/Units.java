@@ -8,7 +8,8 @@ import lombok.Getter;
 @Setter
 public class Units {
     private String character_id;
-    private String chosen;  // this might cause an error as the chosen variable only appears if the unit is chosen
+    private String chosen;
+    private String[] itemNames;
     private int[] items;
     private String name;
     private int rarity;

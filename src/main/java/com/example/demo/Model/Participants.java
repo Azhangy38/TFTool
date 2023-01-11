@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Participants {
+    private List<String> augments;
     private Companion companion;
     private int gold_left;
     private int last_round;
