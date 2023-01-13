@@ -10,7 +10,7 @@ public interface Constants {
     String MATCH = "https://americas.api.riotgames.com/tft/match/v1/matches/";
     String HIGH_ELO = "https://na1.api.riotgames.com/tft/league/v1/";
     String LOW_ELO = "https://na1.api.riotgames.com/tft/league/v1/entries/";
-    String apiKey_temp = "RGAPI-50c64622-81e3-4e80-8b22-cf351a6f61b0"; // REDACTED, replace with your own apikey if you want to try this
+    String apiKey_temp = ""; // REDACTED, replace with your own apikey if you want to try this
 
     enum Numeral {
         I(1), IV(4), V(5), IX(9), X(10), XL(40), L(50), XC(90), C(100), CD(400), D(500), CM(900), M(1000);
