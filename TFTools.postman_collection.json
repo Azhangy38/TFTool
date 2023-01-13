@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "80d3ce50-fb65-4334-8a4b-428136b6219e",
+		"name": "TFTools",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14023088"
+	},
+	"item": [
+		{
+			"name": "Match History",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/matchHistory?summonerId=SpicyN0odlez",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"matchHistory"
+					],
+					"query": [
+						{
+							"key": "summonerId",
+							"value": "SpicyN0odlez"
+						}
+					]
+				},
+				"description": "Get details of a game by POST"
+			},
+			"response": []
+		},
+		{
+			"name": "High Elo List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "RGAPI-0659746d-95b3-49be-a25c-44e0a4a1fbdd",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Development API Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "tier",
+						"value": "Challenger",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/highEloList?tier=challenger",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"highEloList"
+					],
+					"query": [
+						{
+							"key": "tier",
+							"value": "challenger"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Low Elo List",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "RGAPI-0659746d-95b3-49be-a25c-44e0a4a1fbdd",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Development API Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tier\" : \"platinum\",\r\n    \"division\": \"2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/lowEloList",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"lowEloList"
+					],
+					"query": [
+						{
+							"key": "tier",
+							"value": "platinum",
+							"disabled": true
+						},
+						{
+							"key": "division",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Match History Analysis",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/matchHistoryAnalysis?summonerId=SpicyN0odlez",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"matchHistoryAnalysis"
+					],
+					"query": [
+						{
+							"key": "summonerId",
+							"value": "SpicyN0odlez"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Last Match",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"summonerName\": \"SpicyN0odlez\",\r\n    \"matchIdx\": \"0\",\r\n    \"numMatches\": \"20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/gameDetails2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"gameDetails2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
