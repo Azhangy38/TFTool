@@ -5,17 +5,13 @@ A REST-based Java API, TFTool compiles match history data and outputs stats on u
 * Analysis of most popular units and compositions in every tier
 * SQL Database
 # How to use TFTool (using IntelliJ IDE)
-1) Obtain a temp Riot developer API-key and paste your key here: (\TFTool\src\main\java\com\example\demo\Service)
-![image](https://user-images.githubusercontent.com/33067558/121982076-d6d68380-cd5c-11eb-9e8b-c3c52e642dfd.png)
-2) Run the DemoApplication file by right-clicking it and hitting 'Run DemoApplication'
-![image](https://user-images.githubusercontent.com/33067558/121983177-e35bdb80-cd5e-11eb-8946-624ea80c9d9b.png)
-3) The local server is now running. To get HTTP GET and POST requests, create a new HTTP request in Postman and select which api call you want from the TFTController file
-Ex)
-![image](https://user-images.githubusercontent.com/33067558/121982775-2f5a5080-cd5e-11eb-91b5-b5808a3c2c86.png)
-In this example, set key = summonerID and value => name of whatever player you are looking up (the URL will automatically change to match your inputs)
-![image](https://user-images.githubusercontent.com/33067558/121982940-7e07ea80-cd5e-11eb-8c70-7a9c5fe03b04.png)
-Ta-da! Now we have Soju's unit usage analysis
+1) Obtain a temp Riot developer API-key and paste your key in the Constants file: (\TFTool\src\main\java\com\example\demo\Service\Constants)
+![constantstft](https://user-images.githubusercontent.com/33067558/212435324-e934584c-2199-458f-b3ce-b7d4cd7d036c.png)
+2) Run the StartApplication file by right-clicking it and hitting 'Run StartApplication'
+![startApplicationTFT](https://user-images.githubusercontent.com/33067558/212435523-45c70c3c-2c34-4ef9-bf29-53a669e7cddb.png)
+3) Now that the local server is running, import my HTTP requests into Postman ("TFTools.postman_collection")
+![image](https://user-images.githubusercontent.com/33067558/212436547-e454045b-a6f1-49fa-a258-c440ca8ef20a.png)
 
-Disclaimer: Soju was in no way affiliated with this project
+4) Run any of the available http requests. To get your (or the summoner you want to look-up) match history analysis run the "Match History Analysis" GET request on Postman
+![image](https://user-images.githubusercontent.com/33067558/212435989-57692c76-707c-4630-9de8-73c1c9f8c27b.png)
 
-EDIT: Match history analysis is in progress, as Riot no longer publishes static data
