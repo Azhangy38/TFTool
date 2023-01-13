@@ -37,7 +37,7 @@ class DemoApplicationTests {
 	void testLowEloList(){
 		TFTService test = new TFTService();
 		// has to be between 1 and 4
-		LowEloResponse[] response = test.getLowElo("gold", 4, 1);
+		LowEloResponse[] response = test.getLowElo("gold", 4);
 		assertNotNull(response);
 		for (int i = 0; i < response.length; i++){ // maybe use a for each loop
 			System.out.println(response[i].getSummonerName() + ", " + response[i].getLeaguePoints()+", " + i);

@@ -1,14 +1,13 @@
 package com.example.demo.Service;
 
 import com.example.demo.Model.*;
-import com.example.demo.Model.StaticData.SetData.SetData;
-import com.example.demo.Model.StaticData.StaticData;
 import com.example.demo.Response.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import static com.example.demo.Service.Constants.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,26 +18,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class TFTService {
-
-    private static final String MATCH_IDS_URI = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-name/";
-    private static final String PUUID_URI = "https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/";
-    private static final String MATCH_HISTORY = "https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/";
-    private static final String MATCH = "https://americas.api.riotgames.com/tft/match/v1/matches/";
-    private static final String HIGH_ELO = "https://na1.api.riotgames.com/tft/league/v1/";
-    private static final String LOW_ELO = "https://na1.api.riotgames.com/tft/league/v1/entries/";
-
-    private static final String apiKey_temp = ""; // REDACTED, replace with your own apikey if you want to try this
-
-    enum Numeral {
-        I(1), IV(4), V(5), IX(9), X(10), XL(40), L(50), XC(90), C(100), CD(400), D(500), CM(900), M(1000);
-        int weight;
-
-        Numeral(int weight) {
-            this.weight = weight;
-        }
-    }
-
+public class TFTService{
     public static String roman(long n) {
         if (n <= 0) {
             throw new IllegalArgumentException();
@@ -204,13 +184,10 @@ public class TFTService {
      * Input: Hashmap to store all the current units in the game
      * @returns a hashmap that contains each champion as a key
      */
-    public HashMap<String, Integer> createChampionMap(HashMap hm) {
+    public HashMap<String, Integer> createChampionMap(HashMap hm) { // NOT CURRENTLY BEING USED
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader("StaticData.json")) {
             Object obj = jsonParser.parse(reader);
-            StaticData staticData = (StaticData) obj;
-            SetData[] setData = staticData.getSetData();
-
             JSONArray championList = (JSONArray) obj;
 
             championList.forEach(champ -> parseChampionList((JSONObject) champ, hm));
@@ -230,10 +207,7 @@ public class TFTService {
      * Function: sets the values of all the keys to 0
      */
     public static void parseChampionList(JSONObject champion, HashMap champCount) {
-
-
-        champCount.put(champion.get("name"), 0); // initialize each champ to 0
-
+        champCount.put(champion.get("apiName"), 0);
     }
 
     /**
@@ -251,8 +225,8 @@ public class TFTService {
 
         // put data from sorted list to hashmap
         HashMap<String, Integer> sorted = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> aa : list) {
-            sorted.put(aa.getKey(), aa.getValue());
+        for (Map.Entry<String, Integer> entry : list) {
+            sorted.put(entry.getKey(), entry.getValue());
         }
         return sorted;
     }
@@ -269,15 +243,11 @@ public class TFTService {
                 double avgRank = (double) map2.get(entry.getKey()) / (double) entry.getValue();
                 champStat.setName(entry.getKey());
                 champStat.setAvgRank(avgRank);
-                champStat.setNumGames(entry.getValue());
-                // print statements for test cases
-                System.out.println(entry.getKey() + ", Game(s) played: " + entry.getValue() + ", Avg Rank: " + avgRank);
             } else {
-                System.out.println(entry.getKey() + ", Game(s) played: " + entry.getValue() + ", Avg Rank: N/A");
                 champStat.setName(entry.getKey());
                 champStat.setAvgRank(0);
-                champStat.setNumGames(entry.getValue());
             }
+            champStat.setNumGames(entry.getValue());
             champStatList.add(champStat);
         }
         return champStatList;
@@ -338,14 +308,18 @@ public class TFTService {
      * Input: champCount hm, avgRank hm, info, and player index
      * Function: Updates the values in both hash maps given the same keys
      */
-    public void updateMap(HashMap<String, Integer> map1, HashMap<String, Integer> map2, Info info, int idx) {
+    public void updateMap(HashMap<String, Integer> countMap, HashMap<String, Integer> rankMap, Info info, int idx) {
         Participants player = info.getParticipants().get(idx);
         for (int k = 0; k < player.getUnits().size(); k++) {
             Units characters = player.getUnits().get(k);
-            String key = characters.getCharacter_id().substring(5);
-            if (map1.containsKey(key)) {
-                map1.put(key, map1.get(key) + 1);
-                map2.put(key, map2.get(key) + player.getPlacement());
+            String key = characters.getCharacter_id().substring(5); // gets rid of the TFT_prefix
+            if (countMap.containsKey(key)) {
+                countMap.put(key, countMap.get(key) + 1);
+                rankMap.put(key, rankMap.get(key) + player.getPlacement());
+            }
+            else{
+                countMap.put(key, 1);
+                rankMap.put(key, player.getPlacement());
             }
         }
     }
@@ -361,7 +335,7 @@ public class TFTService {
         for (int i = 0; i < matches.length; i++) {
             MatchDetailsResponse matchDetails = getMatchDetails(matches[i]);
             Info info = matchDetails.getInfo();
-            for (int j = 0; j < info.getParticipants().size(); j++) {    // s
+            for (int j = 0; j < info.getParticipants().size(); j++) {
                 if (info.getParticipants().get(j).getPuuid().equals(summoner.getPuuid())) {
                     idx = j;
                 }
@@ -369,7 +343,6 @@ public class TFTService {
             updateMap(champCount, avgRank, info, idx);
         }
         HashMap<String, Integer> sorted = sortByValue(champCount);
-
         setAnalysisMap(sorted, avgRank);
     }
 

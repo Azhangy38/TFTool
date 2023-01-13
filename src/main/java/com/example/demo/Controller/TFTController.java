@@ -58,8 +58,8 @@ public class TFTController {
         SummonerIDResponse summoner = tftService.getSummonerID(summonerId);
         HashMap<String, Integer> champCount = new HashMap<>();
         HashMap<String, Integer> avgRank = new HashMap<>();
-        tftService.createChampionMap(champCount);
-        tftService.createChampionMap(avgRank);
+        //tftService.createChampionMap(champCount);
+        //tftService.createChampionMap(avgRank);
         String[] matches = tftService.getMatchHistory(summoner.getPuuid(), 20);
         tftService.analyzeChampionStats(summoner, matches, champCount, avgRank);
         List<ChampStat> champStatList = tftService.setAnalysisMap(champCount, avgRank);

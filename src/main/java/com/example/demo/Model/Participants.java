@@ -1,6 +1,5 @@
 package com.example.demo.Model;
 
-import com.example.demo.Response.BaseResponseRiotAPI;
 import lombok.Setter;
 import lombok.Getter;
 
@@ -14,6 +13,7 @@ public class Participants {
     private int gold_left;
     private int last_round;
     private int level;
+    private int partner_group_id;
     private int placement;
     private int players_eliminated;
     private String puuid;
