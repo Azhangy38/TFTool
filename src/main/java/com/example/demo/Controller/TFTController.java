@@ -16,11 +16,14 @@ import com.example.demo.Service.TFTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import com.example.demo.Entity.Tactician;
+
 
 @RestController
 public class TFTController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
+
     @Autowired
     private TFTService tftService;
 
@@ -45,7 +48,6 @@ public class TFTController {
 
         return "Tactician Deleted";
     }
-
 
     @GetMapping("/matchHistory")
     public String[] getMatchHistory(@RequestParam String summonerId) {
