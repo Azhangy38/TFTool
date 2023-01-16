@@ -3,7 +3,7 @@ A REST-based Java API, TFTool compiles match history data and outputs stats on u
 # Planned Updates
 * ~~Will support data from Sets 1-3.5 and 4.5~~ SHELVED
 * Analysis of most popular units and compositions in every tier
-* ~~SQL Database~~ COMPLETED, MySQL Database is supported
+* ~~SQL Database~~ COMPLETED, Support for MySQL database has been added
 # How to use TFTool (using IntelliJ IDE)
 1) Obtain a temp Riot developer API-key and paste your key in the Constants file: (\TFTool\src\main\java\com\example\demo\Service\Constants)
 ![constantstft](https://user-images.githubusercontent.com/33067558/212435324-e934584c-2199-458f-b3ce-b7d4cd7d036c.png)
