@@ -10,7 +10,10 @@ import com.example.demo.Queries.GameQuery;
 import com.example.demo.Queries.LowDivisionQuery;
 import com.example.demo.Response.*;
 import com.example.demo.Service.TFTService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import com.example.demo.Entity.Tactician;
 
 import javax.inject.Inject;
 
@@ -19,8 +22,30 @@ public class TFTController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
-    @Inject
+    @Autowired
     private TFTService tftService;
+
+    @PostMapping("/tacticians")
+    public Tactician saveTactician(@Valid @RequestBody Tactician tactician){
+        return tftService.saveTactician(tactician);
+    }
+
+    @GetMapping("/tacticians")
+    public List<Tactician> fetchTacticianList(){
+        return tftService.fetchTacticianList();
+    }
+
+    @PutMapping("/tacticians/{id}")
+    public Tactician updateTactician(@RequestBody Tactician tactician, @PathVariable("id") Long tacticianId){
+        return tftService.updateTactician(tactician, tacticianId);
+    }
+
+    @DeleteMapping("/tacticians/{id}")
+    public String deleteTacticianById(@PathVariable("id") Long tacticianId){
+        tftService.deleteTacticianById(tacticianId);
+
+        return "Tactician Deleted";
+    }
 
     @GetMapping("/matchHistory")
     public String[] getMatchHistory(@RequestParam String summonerId) {
