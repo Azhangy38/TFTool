@@ -1,13 +1,18 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entity.Tactician;
 import com.example.demo.Model.*;
-import com.example.demo.Response.*;
+import com.example.demo.Repository.TacticianRepository;
+import com.example.demo.Response.HighEloResponse;
+import com.example.demo.Response.LowEloResponse;
+import com.example.demo.Response.MatchDetailsResponse;
+import com.example.demo.Response.SummonerIDResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import static com.example.demo.Service.Constants.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -17,8 +22,65 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import static com.example.demo.Service.Constants.*;
+
 @Service
-public class TFTService{
+public class TFTService {
+
+    @Autowired
+    private TacticianRepository tacticianRepository;
+
+    public Tactician saveTactician(Tactician tactician) {
+        return tacticianRepository.save(tactician);
+    }
+
+    public List<Tactician> fetchTacticianList() {
+        return tacticianRepository.findAll();
+    }
+
+    public Tactician updateTactician(Tactician tactician, Long tacticianId) {
+        Tactician tacticianDB
+                = tacticianRepository.findById(tacticianId)
+                .get();
+
+        if (Objects.nonNull(tactician.getId())) {
+            tacticianDB.setId(tactician.getId());
+        }
+
+        if (Objects.nonNull(
+                tactician.getSummonerName())
+                && !"".equalsIgnoreCase(
+                tactician.getSummonerName())) {
+            tacticianDB.setSummonerName(
+                    tactician.getSummonerName());
+        }
+
+        if (tactician.getSummonerLevel() != 0) {
+            tacticianDB.setSummonerLevel(
+                    tactician.getSummonerLevel());
+        }
+
+        if (Objects.nonNull(
+                tactician.getTier())
+                && !"".equalsIgnoreCase(
+                tactician.getTier())) {
+            tacticianDB.setTier(
+                    tactician.getTier());
+        }
+
+        if (tactician.getDivision() != 0) {
+            tacticianDB.setDivision(
+                    tactician.getDivision());
+        }
+        return tacticianRepository.save(tacticianDB);
+    }
+
+    public String deleteTacticianById(Long tacticianId) {
+
+        tacticianRepository.deleteById(tacticianId);
+        return "Deleted Tactician";
+    }
+
     public static String roman(long n) {
         if (n <= 0) {
             throw new IllegalArgumentException();
@@ -62,7 +124,7 @@ public class TFTService{
     }
 
     public HighEloResponse getHighElo(String division) { // Master and above, division names will need toUpperCase() method
-        String highEloUrl = HIGH_ELO + division.toLowerCase()+"?api_key="+apiKey_temp;
+        String highEloUrl = HIGH_ELO + division.toLowerCase() + "?api_key=" + apiKey_temp;
         HighEloResponse response = client
                 .target(highEloUrl)
                 .request(MediaType.APPLICATION_JSON)
@@ -74,7 +136,7 @@ public class TFTService{
         String TIER = tier.toUpperCase();
         String numeral = roman(division);
 
-        String lowEloUrl = LOW_ELO + TIER + "/" + numeral + "?api_key="+apiKey_temp;
+        String lowEloUrl = LOW_ELO + TIER + "/" + numeral + "?api_key=" + apiKey_temp;
 
         LowEloResponse[] response = client
                 .target(lowEloUrl)
@@ -86,6 +148,7 @@ public class TFTService{
 
     /**
      * Input: summoner's puuid and the number of matches that we want to look at
+     *
      * @returns a list of matchID's that pertain to the most recent matches
      */
     public String[] getMatchHistory(String puuid, int numMatches) {
@@ -100,6 +163,7 @@ public class TFTService{
 
     /**
      * Input: MatchID of the specific game we want to analyze
+     *
      * @returns placements and details regarding the results of the match
      */
     public MatchDetailsResponse getMatchDetails(String matchID) {
@@ -114,6 +178,7 @@ public class TFTService{
 
     /**
      * Input: MatchID of the specific game we want to analyze
+     *
      * @returns prints the units and traits that were played by each of the participants
      */
     public void getMatchAnalysis(String matchID) {
@@ -182,6 +247,7 @@ public class TFTService{
 
     /**
      * Input: Hashmap to store all the current units in the game
+     *
      * @returns a hashmap that contains each champion as a key
      */
     public HashMap<String, Integer> createChampionMap(HashMap hm) { // NOT CURRENTLY BEING USED
@@ -212,6 +278,7 @@ public class TFTService{
 
     /**
      * Input: Hashmap to sort
+     *
      * @returns a hashmap that is sorted by the values
      */
     public HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm) {
@@ -233,6 +300,7 @@ public class TFTService{
 
     /**
      * Input: A hashmap that contains all the games played with a unit and a second hashmap that calculates the avgRank with each unit
+     *
      * @returns an arraylist that has all the stats from both hashmaps
      */
     public List<ChampStat> setAnalysisMap(HashMap<String, Integer> map1, HashMap<String, Integer> map2) {
@@ -255,6 +323,7 @@ public class TFTService{
 
     /**
      * Input: details of match each player
+     *
      * @returns An arraylist that stores each player and their specified stats
      */
     public List<Player> getPlayersList(MatchDetailsResponse matchDetails) {
@@ -275,6 +344,7 @@ public class TFTService{
 
     /**
      * Input: List of LowEloPlayers
+     *
      * @returns the list of LowEloPlayers with their lp
      */
     public List<Summoner> getLowSummonersList(LowEloResponse[] response) {
@@ -290,6 +360,7 @@ public class TFTService{
 
     /**
      * Input: List of HighEloPlayers
+     *
      * @returns the list of HighEloPlayers with their lp
      */
     public List<Summoner> getHighSummonersList(HighEloResponse response) {
@@ -316,8 +387,7 @@ public class TFTService{
             if (countMap.containsKey(key)) {
                 countMap.put(key, countMap.get(key) + 1);
                 rankMap.put(key, rankMap.get(key) + player.getPlacement());
-            }
-            else{
+            } else {
                 countMap.put(key, 1);
                 rankMap.put(key, player.getPlacement());
             }
@@ -345,6 +415,63 @@ public class TFTService{
         HashMap<String, Integer> sorted = sortByValue(champCount);
         setAnalysisMap(sorted, avgRank);
     }
-
-
+//    Tactician saveTactician(Tactician tactician);
+//    List<Tactician> fetchTacticianList();
+//    Tactician updateTactician(Tactician tactician, Long tacticianId);
+//    String deleteTacticianById(Long tacticianId);
+//
+//    SummonerIDResponse getSummonerID(String name);
+//    SummonerIDResponse getSummonerName(String puuid);
+//    HighEloResponse getHighElo(String division);
+//    LowEloResponse[] getLowElo(String tier, int division);
+//    String[] getMatchHistory(String puuid, int numMatches);
+//    MatchDetailsResponse getMatchDetails(String matchID);
+//    void getMatchAnalysis(String matchID);
+//    void printTraits(Info info, int idx);
+//    void printUnits(Info info, int idx);
+//    HashMap<String, Integer> createChampionMap(HashMap hm);
+//
+//    static void parseChampionList(JSONObject champion, HashMap champCount) {
+//        champCount.put(champion.get("apiName"), 0);
+//    }
+//
+//    HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm);
+//
+//    /**
+//     * Input: A hashmap that contains all the games played with a unit and a second hashmap that calculates the avgRank with each unit
+//     * @returns an arraylist that has all the stats from both hashmaps
+//     */
+//    List<ChampStat> setAnalysisMap(HashMap<String, Integer> map1, HashMap<String, Integer> map2);
+//
+//    /**
+//     * Input: details of match each player
+//     * @returns An arraylist that stores each player and their specified stats
+//     */
+//    List<Player> getPlayersList(MatchDetailsResponse matchDetails);
+//
+//    /**
+//     * Input: List of LowEloPlayers
+//     * @returns the list of LowEloPlayers with their lp
+//     */
+//    List<Summoner> getLowSummonersList(LowEloResponse[] response);
+//
+//    /**
+//     * Input: List of HighEloPlayers
+//     * @returns the list of HighEloPlayers with their lp
+//     */
+//    List<Summoner> getHighSummonersList(HighEloResponse response);
+//
+//    /**
+//     * Input: champCount hm, avgRank hm, info, and player index
+//     * Function: Updates the values in both hash maps given the same keys
+//     */
+//    void updateMap(HashMap<String, Integer> countMap, HashMap<String, Integer> rankMap, Info info, int idx);
+//
+//    /**
+//     * Input: summoner, matches, champCount, avgRank
+//     * Function: Creates the arraylist that contains the analysis of a players' match history
+//     */
+//    void analyzeChampionStats(SummonerIDResponse summoner,
+//                                     String[] matches, HashMap champCount,
+//                                     HashMap avgRank);
 }

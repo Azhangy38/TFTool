@@ -10,17 +10,18 @@ import com.example.demo.Queries.GameQuery;
 import com.example.demo.Queries.LowDivisionQuery;
 import com.example.demo.Response.*;
 import com.example.demo.Service.TFTService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
 
 @RestController
 public class TFTController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
-    @Inject
+    @Autowired
     private TFTService tftService;
+
+
 
     @GetMapping("/matchHistory")
     public String[] getMatchHistory(@RequestParam String summonerId) {
