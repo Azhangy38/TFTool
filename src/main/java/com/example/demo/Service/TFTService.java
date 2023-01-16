@@ -1,11 +1,14 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entity.Tactician;
 import com.example.demo.Model.*;
+import com.example.demo.Repository.TacticianRepository;
 import com.example.demo.Response.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import static com.example.demo.Service.Constants.*;
 
@@ -19,6 +22,61 @@ import java.util.*;
 
 @Service
 public class TFTService{
+    @Autowired
+    private TacticianRepository tacticianRepository;
+    public Tactician saveTactician(Tactician tactician){
+        return tacticianRepository.save(tactician);
+    }
+
+    public List<Tactician> fetchTacticianList(){
+        return (List<Tactician>) tacticianRepository.findAll();
+    }
+
+    public Tactician updateTactician(Tactician tactician, Long tacticianId){
+        Tactician tacticianDB
+                = tacticianRepository.findById(tacticianId)
+                .get();
+
+        if (Objects.nonNull(tactician.getId()) && null != tactician.getId()) {
+            tacticianDB.setId(tactician.getId());
+        }
+
+        if (Objects.nonNull(
+                tactician.getSummonerName())
+                && !"".equalsIgnoreCase(
+                tactician.getSummonerName())) {
+            tacticianDB.setSummonerName(
+                    tactician.getSummonerName());
+        }
+
+        if (Objects.nonNull(tactician.getSummonerLevel())
+                && tactician.getSummonerLevel() != 0) {
+            tacticianDB.setSummonerLevel(
+                    tactician.getSummonerLevel());
+        }
+
+        if (Objects.nonNull(
+                tactician.getTier())
+                && !"".equalsIgnoreCase(
+                tactician.getTier())) {
+            tacticianDB.setTier(
+                    tactician.getTier());
+        }
+
+        if (Objects.nonNull(
+                tactician.getDivision())
+                && tactician.getDivision()!=0) {
+            tacticianDB.setDivision(
+                    tactician.getDivision());
+        }
+        return tacticianRepository.save(tacticianDB);
+    }
+    public String deleteTacticianById(Long tacticianId){
+
+        tacticianRepository.deleteById(tacticianId);
+        return "Deleted Tactician";
+    }
+
     public static String roman(long n) {
         if (n <= 0) {
             throw new IllegalArgumentException();

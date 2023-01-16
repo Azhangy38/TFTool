@@ -3,13 +3,17 @@ package com.example.demo.Controller;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.example.demo.Entity.Tactician;
 import com.example.demo.Model.*;
 import com.example.demo.Queries.GameQuery;
 import com.example.demo.Queries.LowDivisionQuery;
+import com.example.demo.Repository.TacticianRepository;
 import com.example.demo.Response.*;
 import com.example.demo.Service.TFTService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -18,9 +22,11 @@ import javax.inject.Inject;
 public class TFTController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
-
-    @Inject
+    @Autowired
     private TFTService tftService;
+
+//    @PostMapping("/tacticians")
+//    public Tactician saveTactician(@Valid @RequestBody Tactician tactician)
 
     @GetMapping("/matchHistory")
     public String[] getMatchHistory(@RequestParam String summonerId) {
