@@ -15,8 +15,7 @@ import com.example.demo.Response.*;
 import com.example.demo.Service.TFTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
+import javax.validation.Valid;
 
 @RestController
 public class TFTController {
@@ -25,8 +24,28 @@ public class TFTController {
     @Autowired
     private TFTService tftService;
 
-//    @PostMapping("/tacticians")
-//    public Tactician saveTactician(@Valid @RequestBody Tactician tactician)
+    @PostMapping("/tacticians")
+    public Tactician saveTactician(@Valid @RequestBody Tactician tactician){
+        return tftService.saveTactician(tactician);
+    }
+
+    @GetMapping("/tacticians")
+    public List<Tactician> fetchTacticianList(){
+        return tftService.fetchTacticianList();
+    }
+
+    @PutMapping("/tacticians/{id}")
+    public Tactician updateTactician(@RequestBody Tactician tactician, @PathVariable("id") Long tacticianId){
+        return tftService.updateTactician(tactician, tacticianId);
+    }
+
+    @DeleteMapping("/tacticians/{id}")
+    public String deleteTacticianById(@PathVariable("id") Long tacticianId){
+        tftService.deleteTacticianById(tacticianId);
+
+        return "Tactician Deleted";
+    }
+
 
     @GetMapping("/matchHistory")
     public String[] getMatchHistory(@RequestParam String summonerId) {

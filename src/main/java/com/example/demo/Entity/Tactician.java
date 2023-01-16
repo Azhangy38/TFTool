@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @Builder
 public class Tactician {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String summonerName;
     private int summonerLevel;
