@@ -74,7 +74,7 @@ class StartApplicationTests {
 	@Test
 	void testMatchDetails(){ // irrelevant test, shortened version of one below
 		TFTService test = new TFTService();
-		SummonerIDResponse summoner = test.getSummonerID("goroutine");
+		SummonerIDResponse summoner = test.getSummonerID("SpicyN0odlez");
 		String[] matches = test.getMatchHistory(summoner.getPuuid(), 20);
 		MatchDetailsResponse matchDetails = test.getMatchDetails(matches[19]);
 		Metadata meta = matchDetails.getMetadata();
@@ -90,7 +90,7 @@ class StartApplicationTests {
 	@Test
 	void testRecentMatchDetails(){ // irrelevant test, shortened version of one below
 		TFTService test = new TFTService();
-		SummonerIDResponse summoner = test.getSummonerID("goroutine");
+		SummonerIDResponse summoner = test.getSummonerID("SpicyN0odlez");
 		String[] matches = test.getMatchHistory(summoner.getPuuid(), 20);
 		for (int i = 0; i < 20; i++){
 			MatchDetailsResponse matchDetails = test.getMatchDetails(matches[i]);
